@@ -8,7 +8,95 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       body: Stack(children: [
         _backgroundBuilder(context),
+        _loginForm(context),
       ]),
+    );
+  }
+
+  Widget _loginForm(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SafeArea(child: Container(height: 180,)),
+          Container(
+            width: size.width * 0.8,
+            padding: EdgeInsets.symmetric(vertical: 50),
+            margin: EdgeInsets.symmetric(vertical: 30),
+            decoration: BoxDecoration(
+                color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: <BoxShadow> [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 3,
+                  offset: Offset(2, 4),
+                  spreadRadius: 3
+                )
+              ]
+            ),
+            child: Column(
+              children: [
+                Text('Ingresa', style: TextStyle(fontSize: 25),),
+                SizedBox(height: 60,),
+                _emailBuilder(),
+                SizedBox(height: 30,),
+                _passwordBuilder(),
+                SizedBox(height: 30,),
+                _buttonBuilder(),
+              ],
+            ),
+          ),
+
+          Text('¿Olvido la contraseña?'),
+          SizedBox(height: 100,)
+        ],
+      ),
+    );
+  }
+
+  Widget _emailBuilder() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          icon: Icon(Icons.alternate_email, color: Colors.deepPurple,),
+          hintText: 'ejemplo@gmail.com',
+          labelText: 'Correo electrónico'
+        ),
+      ),
+    );
+  }
+
+  Widget _passwordBuilder() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        obscureText: true,
+        decoration: InputDecoration(
+          icon: Icon(Icons.lock_outline, color: Colors.deepPurple,),
+          labelText: 'Contraseña'
+        ),
+      ),
+    );
+  }
+
+  Widget _buttonBuilder() {
+    return RaisedButton(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+        child: Text('Ingresar'),
+      ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5)
+        ),
+        elevation: 6,
+        color: Colors.deepPurple,
+        textColor: Colors.white,
+        onPressed: () {
+
+        }
     );
   }
 
@@ -42,9 +130,19 @@ class LoginPage extends StatelessWidget {
           padding: EdgeInsets.only(top: 80),
           child: Column(
             children: [
-              Icon(Icons.person_pin_circle, color: Colors.white, size: 100,),
-              SizedBox(height: 10, width: double.infinity,),
-              Text('Alan Casas', style: TextStyle(color: Colors.white, fontSize: 25),),
+              Icon(
+                Icons.person_pin_circle,
+                color: Colors.white,
+                size: 100,
+              ),
+              SizedBox(
+                height: 10,
+                width: double.infinity,
+              ),
+              Text(
+                'Alan Casas',
+                style: TextStyle(color: Colors.white, fontSize: 25),
+              ),
             ],
           ),
         )
