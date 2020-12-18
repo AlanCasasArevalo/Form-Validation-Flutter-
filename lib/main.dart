@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Form Validation',
-      initialRoute: HomePage.routeName,
+      initialRoute: LoginPage.routeName,
       routes: {
         HomePage.routeName: (BuildContext context) => HomePage(),
         LoginPage.routeName: (BuildContext context) => LoginPage(),
