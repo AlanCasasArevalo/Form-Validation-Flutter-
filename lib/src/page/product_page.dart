@@ -12,19 +12,21 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   final productsProvider = ProductsProvider();
 
   ProductModel _productModel = ProductModel();
 
   @override
   Widget build(BuildContext context) {
-
-    final ProductModel _productToUpdateModel = ModalRoute.of(context).settings.arguments;
+    final ProductModel _productToUpdateModel =
+        ModalRoute.of(context).settings.arguments;
     if (_productToUpdateModel != null) {
       _productModel = _productToUpdateModel;
     }
 
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Producto'),
         actions: [
@@ -81,14 +83,12 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _availableBuilder() {
     return SwitchListTile(
-      activeColor: Colors.deepPurple,
-      title: Text('Disponible'),
+        activeColor: Colors.deepPurple,
+        title: Text('Disponible'),
         value: _productModel.available,
         onChanged: (value) => setState(() {
               _productModel.available = value;
-            }
-        )
-    );
+            }));
   }
 
   TextFormField _productPriceBuilder() {
@@ -122,10 +122,24 @@ class _ProductPageState extends State<ProductPage> {
   void _submit() {
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
-    if(_productModel.id == null) {
+    if (_productModel.id == null) {
       productsProvider.postProduct(_productModel);
+      _showSnackbar('Se ha creado el producto');
     } else {
       productsProvider.updateProduct(_productModel);
+      _showSnackbar('Se ha actualizado el producto');
     }
+  }
+
+  void _showSnackbar(String message) {
+    final snackbar = SnackBar(
+      backgroundColor: Colors.deepPurple,
+      padding: EdgeInsets.all(20),
+      elevation: 24,
+      content: Text(message),
+      duration: Duration(seconds: 1, milliseconds: 500),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackbar);
   }
 }
