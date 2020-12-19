@@ -1,6 +1,8 @@
 import 'dart:async';
 
-class LoginBloc {
+import 'package:flutter_form_validation/src/blocs/validators.dart';
+
+class LoginBloc with Validators {
   // 2 controladores uno para estar observando el email y otro para observar el password
   /*
    Se le agrega la informacion de String al Stream controller para poder escuchar mas elementos a los controladores, en caso de dejar los controladores solo como StreamController(), solo podria tener
@@ -9,8 +11,8 @@ class LoginBloc {
   final _emailController = StreamController<String>.broadcast();
   final _passwordController = StreamController<String>.broadcast();
 
-  Stream<String> get emailStream => _emailController.stream;
-  Stream<String> get passwordStream => _passwordController.stream;
+  Stream<String> get emailStream => _emailController.stream.transform(emailValidator);
+  Stream<String> get passwordStream => _passwordController.stream.transform(passwordValidator);
 
   // Inserción de valores al stream, aunque ponga get son setters insercion de string en los campos
   Function(String) get changeEmail => _emailController.sink.add;
