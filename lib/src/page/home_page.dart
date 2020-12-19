@@ -3,8 +3,14 @@ import 'package:flutter_form_validation/src/models/product_model.dart';
 import 'package:flutter_form_validation/src/page/product_page.dart';
 import 'package:flutter_form_validation/src/providers/products_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static final String routeName = 'home_page';
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final productsProvider = ProductsProvider();
 
   @override
@@ -34,7 +40,7 @@ class HomePage extends StatelessWidget {
             return ListView.builder(
               itemCount: products.length,
                 itemBuilder: (context, index) {
-                return _itemBuilder(context, products[index]);
+                return _itemBuilder(context, products[index], products);
             });
           } else {
             return Center(
@@ -44,7 +50,7 @@ class HomePage extends StatelessWidget {
         });
   }
 
-  Widget _itemBuilder (BuildContext context, ProductModel product) {
+  Widget _itemBuilder (BuildContext context, ProductModel product, List<ProductModel> products) {
     return Dismissible(
       key: UniqueKey(),
       child: ListTile(
@@ -57,7 +63,11 @@ class HomePage extends StatelessWidget {
         color: Colors.red,
       ),
       onDismissed: (direction) {
-        productsProvider.deleteProduct(product.id);
+        productsProvider.deleteProduct(product.id)
+            .then((value) => setState(() {
+              products.remove(product);
+        })
+        );
       },
     );
   }

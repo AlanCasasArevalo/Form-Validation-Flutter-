@@ -34,7 +34,7 @@ class ProductsProvider {
   }
 
   Future<int> deleteProduct (idToDelete) async {
-    final url = '$_firebaseBaseURL/products$idToDelete.json';
+    final url = '$_firebaseBaseURL/products/$idToDelete.json';
     final response = await http.delete(url);
     final decodedData = json.decode(response.body);
 
