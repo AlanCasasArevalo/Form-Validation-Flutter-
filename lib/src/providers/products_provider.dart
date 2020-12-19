@@ -47,4 +47,16 @@ class ProductsProvider {
     }
   }
 
+  Future<int> updateProduct (ProductModel productModel) async {
+    final url = '$_firebaseBaseURL/products/${productModel.id}.json';
+    final response = await http.put(url, body: productModelToJson(productModel));
+
+    if (response.statusCode > 199 && response.statusCode < 300 || response.reasonPhrase == 'OK') {
+      // ok
+      return 1;
+    } else {
+      // algo mal
+      return -1;
+    }
+  }
 }
