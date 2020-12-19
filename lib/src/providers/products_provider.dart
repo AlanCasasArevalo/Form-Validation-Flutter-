@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_form_validation/src/models/product_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:mime_type/mime_type.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ProductsProvider {
   final String _firebaseBaseURL = 'YOUR_FIREBASE_URL';
@@ -57,6 +61,36 @@ class ProductsProvider {
     } else {
       // algo mal
       return -1;
+    }
+  }
+
+  Future<String> uploadImage (PickedFile imageFile) async {
+    final url = Uri.parse('http://api.cloudinary.com/v1_1/dr1lglwkr/image/upload?upload_preset=rotxcch5');
+    final mimeType = mime(imageFile.path).split('/');
+
+    final imageUploadRequest = http.MultipartRequest(
+      'POST',
+      url,
+    );
+
+    final mediaType = MediaType(mimeType[0], mimeType[1]);
+    final file = await http.MultipartFile.fromPath('file', imageFile.path, contentType: mediaType);
+
+    //Se pueden subir multiples archivos simplemente agregandolos a la request.
+    imageUploadRequest.files.add(file);
+
+    final streamResponse = await imageUploadRequest.send();
+
+    final response = await http.Response.fromStream(streamResponse);
+
+    if (response.statusCode > 199 && response.statusCode < 300 || response.reasonPhrase == 'OK') {
+      // ok
+      final responseData = json.decode(response.body);
+      return responseData['secure_url'];
+    } else {
+      // algo mal
+      print(response.body);
+      return 'algo mal';
     }
   }
 }

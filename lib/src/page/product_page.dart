@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/models/product_model.dart';
 import 'package:flutter_form_validation/src/providers/products_provider.dart';
@@ -130,12 +128,16 @@ class _ProductPageState extends State<ProductPage> {
         onPressed: _isSaving ? null : _submit);
   }
 
-  void _submit() {
+  void _submit() async {
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
     setState(() {
       _isSaving = true;
     });
+
+    if ( _image != null) {
+      _productModel.urlImage = await productsProvider.uploadImage(_image);
+    }
 
     if (_productModel.id == null) {
       productsProvider.postProduct(_productModel);
