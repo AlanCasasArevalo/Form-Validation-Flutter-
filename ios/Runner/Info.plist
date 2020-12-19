@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>Necesitamos la camara para poder tomar fotos de sus productos a vender 😊</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Necesitamos el uso del carrete para poder mostrar los productos a vender</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Necesitamos el uso del carrete para poder mostrar los productos a vender</string>
 </dict>
 </plist>
