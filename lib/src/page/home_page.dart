@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
         color: Colors.red,
       ),
       onDismissed: (direction) {
-        // TODO: borrar producto
+        productsProvider.deleteProduct(product.id);
       },
     );
   }

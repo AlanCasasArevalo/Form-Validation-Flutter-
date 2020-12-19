@@ -32,4 +32,19 @@ class ProductsProvider {
       return products;
     }
   }
+
+  Future<int> deleteProduct (idToDelete) async {
+    final url = '$_firebaseBaseURL/products$idToDelete.json';
+    final response = await http.delete(url);
+    final decodedData = json.decode(response.body);
+
+    if (response.statusCode > 199 && response.statusCode < 300 || response.reasonPhrase == 'OK') {
+      // ok
+      return 1;
+    } else {
+      // algo mal
+      return -1;
+    }
+  }
+
 }
