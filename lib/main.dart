@@ -27,6 +27,9 @@ class MyApp extends StatelessWidget {
             child: Container(child: Text('Pon_aqui_tu_titulo')),
           ),
         ),
+        theme: ThemeData(
+          primaryColor: Colors.deepPurple
+        ),
       ),
     );
   }

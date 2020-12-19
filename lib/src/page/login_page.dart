@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_validation/src/blocs/provider.dart';
 
 class LoginPage extends StatelessWidget {
   static final String routeName = 'login_page';
@@ -14,90 +15,117 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginForm(BuildContext context) {
+    final bloc = Provider.of(context);
+
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Column(
         children: [
-          SafeArea(child: Container(height: 180,)),
+          SafeArea(
+              child: Container(
+            height: 180,
+          )),
           Container(
             width: size.width * 0.8,
             padding: EdgeInsets.symmetric(vertical: 50),
             margin: EdgeInsets.symmetric(vertical: 30),
             decoration: BoxDecoration(
                 color: Colors.white,
-              borderRadius: BorderRadius.circular(5),
-              boxShadow: <BoxShadow> [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 3,
-                  offset: Offset(2, 4),
-                  spreadRadius: 3
-                )
-              ]
-            ),
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 3,
+                      offset: Offset(2, 4),
+                      spreadRadius: 3)
+                ]),
             child: Column(
               children: [
-                Text('Ingresa', style: TextStyle(fontSize: 25),),
-                SizedBox(height: 60,),
-                _emailBuilder(),
-                SizedBox(height: 30,),
-                _passwordBuilder(),
-                SizedBox(height: 30,),
+                Text(
+                  'Ingresa',
+                  style: TextStyle(fontSize: 25),
+                ),
+                SizedBox(
+                  height: 60,
+                ),
+                _emailBuilder(bloc),
+                SizedBox(
+                  height: 30,
+                ),
+                _passwordBuilder(bloc),
+                SizedBox(
+                  height: 30,
+                ),
                 _buttonBuilder(),
               ],
             ),
           ),
-
           Text('¿Olvido la contraseña?'),
-          SizedBox(height: 100,)
+          SizedBox(
+            height: 100,
+          )
         ],
       ),
     );
   }
 
-  Widget _emailBuilder() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          icon: Icon(Icons.alternate_email, color: Colors.deepPurple,),
-          hintText: 'ejemplo@gmail.com',
-          labelText: 'Correo electrónico'
-        ),
-      ),
+  Widget _emailBuilder(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                icon: Icon(
+                  Icons.alternate_email,
+                  color: Colors.deepPurple,
+                ),
+                hintText: 'ejemplo@gmail.com',
+                labelText: 'Correo electrónico',
+                counterText: snapshot.data),
+            onChanged: bloc.changeEmail,
+          ),
+        );
+      },
     );
   }
 
-  Widget _passwordBuilder() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock_outline, color: Colors.deepPurple,),
-          labelText: 'Contraseña'
-        ),
-      ),
+  Widget _passwordBuilder(LoginBloc bloc) {
+    return StreamBuilder(
+        stream: bloc.passwordStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return Container(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.lock_outline,
+                    color: Colors.deepPurple,
+                  ),
+                  labelText: 'Contraseña',
+                  counterText: snapshot.data
+              ),
+              onChanged: bloc.changePassword,
+            ),
+          );
+        }
     );
   }
 
   Widget _buttonBuilder() {
     return RaisedButton(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-        child: Text('Ingresar'),
-      ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5)
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+          child: Text('Ingresar'),
         ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         elevation: 6,
         color: Colors.deepPurple,
         textColor: Colors.white,
-        onPressed: () {
-
-        }
-    );
+        onPressed: () {});
   }
 
   Widget _backgroundBuilder(BuildContext context) {
