@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/login_page.dart';
+import 'package:flutter_form_validation/src/page/register_page.dart';
 
 import 'src/page/product_page.dart';
 
@@ -16,11 +17,12 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Form Validation',
-        initialRoute: HomePage.routeName,
+        initialRoute: LoginPage.routeName,
         routes: {
           HomePage.routeName: (BuildContext context) => HomePage(),
           LoginPage.routeName: (BuildContext context) => LoginPage(),
           ProductPage.routeName: (BuildContext context) => ProductPage(),
+          RegisterPage.routeName: (BuildContext context) => RegisterPage(),
         },
         home: Scaffold(
           appBar: AppBar(

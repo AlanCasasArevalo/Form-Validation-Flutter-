@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/page/home_page.dart';
-import 'package:flutter_form_validation/src/page/register_page.dart';
+import 'package:flutter_form_validation/src/page/login_page.dart';
 
-class LoginPage extends StatelessWidget {
-  static final String routeName = 'login_page';
+class RegisterPage extends StatelessWidget {
+  static final String routeName = 'register_page';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
         _backgroundBuilder(context),
-        _loginForm(context),
+        _registerForm(context),
       ]),
     );
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _registerForm(BuildContext context) {
     final bloc = Provider.of(context);
 
     final size = MediaQuery.of(context).size;
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Login',
+                  'Registro',
                   style: TextStyle(fontSize: 25),
                 ),
                 SizedBox(
@@ -63,10 +63,8 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           FlatButton(
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, RegisterPage.routeName);
-              },
-              child: Text('Crear una nueva cuenta')
+              onPressed: () => Navigator.pushReplacementNamed(context, LoginPage.routeName),
+              child: Text('¿Ya tienes cuenta?, Login')
           ),
           SizedBox(
             height: 100,
