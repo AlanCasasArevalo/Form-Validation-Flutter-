@@ -16,6 +16,7 @@ class _ProductPageState extends State<ProductPage> {
   final productsProvider = ProductsProvider();
 
   ProductModel _productModel = ProductModel();
+  bool _isSaving = false;
 
   @override
   Widget build(BuildContext context) {
@@ -116,12 +117,16 @@ class _ProductPageState extends State<ProductPage> {
         textColor: Colors.white,
         icon: Icon(Icons.save),
         label: Text('Guardar'),
-        onPressed: _submit);
+        onPressed: _isSaving ? null : _submit);
   }
 
   void _submit() {
     if (!formKey.currentState.validate()) return;
     formKey.currentState.save();
+    setState(() {
+      _isSaving = true;
+    });
+
     if (_productModel.id == null) {
       productsProvider.postProduct(_productModel);
       _showSnackbar('Se ha creado el producto');
@@ -129,6 +134,8 @@ class _ProductPageState extends State<ProductPage> {
       productsProvider.updateProduct(_productModel);
       _showSnackbar('Se ha actualizado el producto');
     }
+
+    Navigator.pop(context);
   }
 
   void _showSnackbar(String message) {
