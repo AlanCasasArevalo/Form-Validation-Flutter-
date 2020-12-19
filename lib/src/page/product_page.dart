@@ -164,8 +164,14 @@ class _ProductPageState extends State<ProductPage> {
 
   _showImage () {
     if(_productModel.urlImage != null) {
-      // TODO: arreglar esto
-      return Container();
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: FadeInImage(
+            placeholder: AssetImage('assets/loading.gif'),
+            image: NetworkImage(_productModel.urlImage),
+            height: 250,
+            fit: BoxFit.cover),
+      );
     } else {
       return Image(
         image: AssetImage( _image?.path ?? 'assets/no_image.png'),
@@ -199,8 +205,7 @@ class _ProductPageState extends State<ProductPage> {
 
     // Si el usuario cancelo o no selecciona una foto
     if (_image != null) {
-      // limpieza
-      // product.urlImg = null;
+      _productModel.urlImage = null;
     }
     setState(() {});
   }

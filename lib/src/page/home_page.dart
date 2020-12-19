@@ -58,14 +58,38 @@ class _HomePageState extends State<HomePage> {
       BuildContext context, ProductModel product, List<ProductModel> products) {
     return Dismissible(
       key: UniqueKey(),
-      child: ListTile(
-        title: Text(product.name),
-        subtitle: Text('${product.price} €'),
-        onTap: () => Navigator.pushNamed(context, ProductPage.routeName,
-                arguments: product)
-            .then((value) {
-          setState(() {});
-        }),
+      child: Card(
+        margin: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              (product.urlImage == null)
+                  ? Image(
+                      image: AssetImage('assets/no_image.png'),
+                    )
+                  : FadeInImage(
+                      placeholder: AssetImage('assets/loading.gif'),
+                      image: NetworkImage(product.urlImage),
+                      height: 300,
+                      width: double.infinity,
+                      fit: BoxFit.cover),
+              ListTile(
+                title: Text(product.name),
+                subtitle: Text('${product.price} €'),
+                onTap: () => Navigator.pushNamed(context, ProductPage.routeName,
+                        arguments: product)
+                    .then((value) {
+                  setState(() {});
+                }),
+              )
+            ],
+          ),
+        ),
       ),
       background: Container(
         child: Center(
