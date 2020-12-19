@@ -30,12 +30,35 @@ class HomePage extends StatelessWidget {
         future: productsProvider.getProducts(),
         builder: (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
           if (snapshot.hasData) {
-            return Container();
+            final List<ProductModel> products = snapshot.data;
+            return ListView.builder(
+              itemCount: products.length,
+                itemBuilder: (context, index) {
+                return _itemBuilder(context, products[index]);
+            });
           } else {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
         });
+  }
+
+  Widget _itemBuilder (BuildContext context, ProductModel product) {
+    return Dismissible(
+      key: UniqueKey(),
+      child: ListTile(
+        title: Text(product.name),
+        subtitle: Text('${product.price} €'),
+        onTap: () => Navigator.pushNamed(context, ProductPage.routeName),
+      ),
+      background: Container(
+        child: Center(child: Text('Borrando ....', style: TextStyle(fontSize: 30, color: Colors.white),)),
+        color: Colors.red,
+      ),
+      onDismissed: (direction) {
+        // TODO: borrar producto
+      },
+    );
   }
 }
