@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/models/product_model.dart';
 import 'package:flutter_form_validation/src/providers/products_provider.dart';
 import 'package:flutter_form_validation/src/utils/utils.dart' as utils;
+import 'package:image_picker/image_picker.dart';
 
 class ProductPage extends StatefulWidget {
   static final String routeName = 'product_page';
@@ -18,6 +21,9 @@ class _ProductPageState extends State<ProductPage> {
   ProductModel _productModel = ProductModel();
   bool _isSaving = false;
 
+  final _imagePicker = ImagePicker();
+  PickedFile _image;
+
   @override
   Widget build(BuildContext context) {
     final ProductModel _productToUpdateModel =
@@ -32,8 +38,8 @@ class _ProductPageState extends State<ProductPage> {
         title: Text('Producto'),
         actions: [
           IconButton(
-              icon: Icon(Icons.photo_size_select_actual), onPressed: () {}),
-          IconButton(icon: Icon(Icons.camera_alt), onPressed: () {}),
+              icon: Icon(Icons.photo_size_select_actual), onPressed: _selectPhoto),
+          IconButton(icon: Icon(Icons.camera_alt), onPressed: _takePhoto),
         ],
       ),
       body: SingleChildScrollView(
@@ -43,6 +49,10 @@ class _ProductPageState extends State<ProductPage> {
             key: formKey,
             child: Column(
               children: [
+                _showImage (),
+                SizedBox(
+                  height: 16,
+                ),
                 _productNameBuilder(),
                 SizedBox(
                   height: 16,
@@ -148,5 +158,48 @@ class _ProductPageState extends State<ProductPage> {
     );
 
     scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
+  _showImage () {
+    if(_productModel.urlImage != null) {
+      // TODO: arreglar esto
+      return Container();
+    } else {
+      return Image(
+        image: AssetImage( _image?.path ?? 'assets/no_image.png'),
+        height: 300,
+        fit: BoxFit.cover,
+      );
+    }
+  }
+
+  _selectPhoto() async {
+    _processImage( ImageSource.gallery );
+  }
+
+  _takePhoto() async {
+    _processImage( ImageSource.camera );
+  }
+
+  _processImage( ImageSource type ) async {
+    final _picker = ImagePicker();
+
+    final pickedFile = await _picker.getImage(
+      source: type,
+    );
+
+    // Para manejar el error al cancelar la seleccion de una foto
+    try {
+      _image = PickedFile(pickedFile.path);
+    } catch (e) {
+      print('$e');
+    }
+
+    // Si el usuario cancelo o no selecciona una foto
+    if (_image != null) {
+      // limpieza
+      // product.urlImg = null;
+    }
+    setState(() {});
   }
 }
