@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
+import 'package:flutter_form_validation/src/page/product_page.dart';
 
 class HomePage extends StatelessWidget {
   static final String routeName = 'home_page';
@@ -12,15 +13,16 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('HOME'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text('Email => ${bloc.email}'),
-          Divider(),
-          Text('Password => ${bloc.password}'),
-        ],
-      )
+      body: Container(),
+      floatingActionButton: _floatingActionButtonBuilder(context),
     );
+  }
+  
+  Widget _floatingActionButtonBuilder(BuildContext context) {
+    return FloatingActionButton(
+      backgroundColor: Colors.deepPurple,
+      child: Icon(Icons.add),
+        onPressed: () => Navigator.pushNamed(context, ProductPage.routeName)
+        );
   }
 }
