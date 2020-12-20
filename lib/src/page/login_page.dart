@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
-import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/register_page.dart';
+import 'package:flutter_form_validation/src/providers/user_provider.dart';
 
 class LoginPage extends StatelessWidget {
   static final String routeName = 'login_page';
+  final _userProvider = UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +147,9 @@ class LoginPage extends StatelessWidget {
   }
 
   _login(BuildContext context, LoginBloc bloc) {
-    Navigator.pushReplacementNamed(context, HomePage.routeName);
+    _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.login);
+
+    // Navigator.pushReplacementNamed(context, HomePage.routeName);
   }
 
   Widget _backgroundBuilder(BuildContext context) {

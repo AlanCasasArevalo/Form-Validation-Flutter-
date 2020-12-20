@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
-import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/login_page.dart';
 import 'package:flutter_form_validation/src/providers/user_provider.dart';
 
@@ -146,7 +145,7 @@ class RegisterPage extends StatelessWidget {
   }
 
   _register(BuildContext context, LoginBloc bloc) {
-    _userProvider.registerUser(bloc.email, bloc.password);
+    _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.register);
   }
 
   Widget _backgroundBuilder(BuildContext context) {
