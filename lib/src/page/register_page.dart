@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/login_page.dart';
+import 'package:flutter_form_validation/src/providers/user_provider.dart';
 
 class RegisterPage extends StatelessWidget {
   static final String routeName = 'register_page';
+
+  final _userProvider = UserProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +116,6 @@ class RegisterPage extends StatelessWidget {
                     color: Colors.deepPurple,
                   ),
                   labelText: 'Contraseña',
-                  counterText: snapshot.data,
                 errorText: snapshot.error
               ),
               onChanged: bloc.changePassword,
@@ -130,21 +132,21 @@ class RegisterPage extends StatelessWidget {
           return RaisedButton(
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                child: Text('Ingresar'),
+                child: Text('Registrar'),
               ),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               elevation: 6,
               color: Colors.deepPurple,
               textColor: Colors.white,
-              onPressed: snapshot.hasData ? () => _login(context, bloc) : null
+              onPressed: snapshot.hasData ? () => _register(context, bloc) : null
           );
         }
     );
 
   }
 
-  _login(BuildContext context, LoginBloc bloc) {
-    Navigator.pushReplacementNamed(context, HomePage.routeName);
+  _register(BuildContext context, LoginBloc bloc) {
+    _userProvider.registerUser(bloc.email, bloc.password);
   }
 
   Widget _backgroundBuilder(BuildContext context) {
