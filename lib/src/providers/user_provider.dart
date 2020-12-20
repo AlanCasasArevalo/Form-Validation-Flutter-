@@ -40,7 +40,7 @@ class UserProvider {
         return {'ok': false, 'token': decodedResponse['error']['message']};
       }
     } else {
-      return {'ok': false, 'token': decodedResponse['error']['message']};
+      return {'ok': false, 'message': decodedResponse['error']['message']};
     }
   }
 }

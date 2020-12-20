@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
+import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/login_page.dart';
 import 'package:flutter_form_validation/src/providers/user_provider.dart';
+import 'package:flutter_form_validation/src/utils/utils.dart';
 
 class RegisterPage extends StatelessWidget {
   static final String routeName = 'register_page';
@@ -144,8 +146,15 @@ class RegisterPage extends StatelessWidget {
 
   }
 
-  _register(BuildContext context, LoginBloc bloc) {
-    _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.register);
+  _register(BuildContext context, LoginBloc bloc) async {
+    Map resultInfo = await _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.register);
+    if (resultInfo['ok']) {
+      Navigator.pushReplacementNamed(context, HomePage.routeName);
+    } else {
+      // TODO: Mostrar alerta
+      showAlert(context, resultInfo['message']);
+    }
+    // _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.register);
   }
 
   Widget _backgroundBuilder(BuildContext context) {
