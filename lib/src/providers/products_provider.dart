@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_form_validation/src/models/product_model.dart';
+import 'package:flutter_form_validation/src/providers/user_shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
@@ -8,8 +9,10 @@ import 'package:http_parser/http_parser.dart';
 class ProductsProvider {
   final String _firebaseBaseURL = 'YOUR_FIREBASE_URL';
 
+  final _preference = UserSharedPreferences();
+
   Future<bool> postProduct(ProductModel productModel) async {
-    final url = '$_firebaseBaseURL/products.json';
+    final url = '$_firebaseBaseURL/products.json?auth=${_preference.token}';
     final response = await http.post(url, body: productModelToJson(productModel));
     final decodedData = json.decode(response.body);
     print(decodedData);
@@ -17,14 +20,14 @@ class ProductsProvider {
   }
 
   Future<List<ProductModel>> getProducts() async {
-    final url = '$_firebaseBaseURL/products.json';
+    final url = '$_firebaseBaseURL/products.json?auth=${_preference.token}';
     final response = await http.get(url);
 
     final Map<String, dynamic> decodedData = json.decode(response.body);
 
     final List<ProductModel> products = List();
 
-    if (decodedData == null) {
+    if (decodedData == null || decodedData.length < 2) {
       return [];
     } else {
       decodedData.forEach((id, product) {
@@ -37,7 +40,7 @@ class ProductsProvider {
   }
 
   Future<int> deleteProduct (idToDelete) async {
-    final url = '$_firebaseBaseURL/products/$idToDelete.json';
+    final url = '$_firebaseBaseURL/products/$idToDelete.json?auth=${_preference.token}';
     final response = await http.delete(url);
     final decodedData = json.decode(response.body);
 
@@ -51,7 +54,7 @@ class ProductsProvider {
   }
 
   Future<int> updateProduct (ProductModel productModel) async {
-    final url = '$_firebaseBaseURL/products/${productModel.id}.json';
+    final url = '$_firebaseBaseURL/products/${productModel.id}.json?auth=${_preference.token}';
     final response = await http.put(url, body: productModelToJson(productModel));
 
     if (response.statusCode > 199 && response.statusCode < 300 || response.reasonPhrase == 'OK') {
