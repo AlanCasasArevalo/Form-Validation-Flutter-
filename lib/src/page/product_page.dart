@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/models/product_model.dart';
-import 'package:flutter_form_validation/src/providers/products_provider.dart';
 import 'package:flutter_form_validation/src/utils/utils.dart' as utils;
 import 'package:image_picker/image_picker.dart';
 
@@ -14,8 +14,8 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final productsProvider = ProductsProvider();
 
+  ProductsBloc _productsBloc;
   ProductModel _productModel = ProductModel();
   bool _isSaving = false;
 
@@ -26,6 +26,8 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     final ProductModel _productToUpdateModel =
         ModalRoute.of(context).settings.arguments;
+
+    _productsBloc = Provider.productsBloc(context);
     if (_productToUpdateModel != null) {
       _productModel = _productToUpdateModel;
     }
@@ -136,14 +138,14 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     if ( _image != null) {
-      _productModel.urlImage = await productsProvider.uploadImage(_image);
+      _productModel.urlImage = await _productsBloc.uploadImage(_image);
     }
 
     if (_productModel.id == null) {
-      productsProvider.postProduct(_productModel);
+      _productsBloc.postProduct(_productModel);
       _showSnackbar('Se ha creado el producto');
     } else {
-      productsProvider.updateProduct(_productModel);
+      _productsBloc.updateProduct(_productModel);
       _showSnackbar('Se ha actualizado el producto');
     }
 

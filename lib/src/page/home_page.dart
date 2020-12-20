@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/models/product_model.dart';
 import 'package:flutter_form_validation/src/page/product_page.dart';
 import 'package:flutter_form_validation/src/providers/products_provider.dart';
@@ -11,15 +12,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final productsProvider = ProductsProvider();
 
   @override
   Widget build(BuildContext context) {
+
+    final _productsBloc = Provider.productsBloc(context);
+    _productsBloc.getProducts();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('HOME'),
       ),
-      body: _buildProductList(),
+      body: _buildProductList(_productsBloc),
       floatingActionButton: _floatingActionButtonBuilder(context),
     );
   }
@@ -34,9 +38,10 @@ class _HomePageState extends State<HomePage> {
             }));
   }
 
-  Widget _buildProductList() {
-    return FutureBuilder(
-        future: productsProvider.getProducts(),
+  Widget _buildProductList(ProductsBloc _productsBloc) {
+
+    return StreamBuilder(
+      stream: _productsBloc.getProductsStream,
         builder:
             (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
           if (snapshot.hasData) {
@@ -44,18 +49,18 @@ class _HomePageState extends State<HomePage> {
             return ListView.builder(
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-                  return _itemBuilder(context, products[index], products);
+                  return _itemBuilder(context, products[index], products, _productsBloc);
                 });
           } else {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-        });
+        }
+    );
   }
 
-  Widget _itemBuilder(
-      BuildContext context, ProductModel product, List<ProductModel> products) {
+  Widget _itemBuilder(BuildContext context, ProductModel product, List<ProductModel> products, ProductsBloc _productsBloc) {
     return Dismissible(
       key: UniqueKey(),
       child: Card(
@@ -100,7 +105,7 @@ class _HomePageState extends State<HomePage> {
         color: Colors.red,
       ),
       onDismissed: (direction) {
-        productsProvider.deleteProduct(product.id).then((value) => setState(() {
+        _productsBloc.deleteProduct(product.id).then((value) => setState(() {
               products.remove(product);
             }));
       },

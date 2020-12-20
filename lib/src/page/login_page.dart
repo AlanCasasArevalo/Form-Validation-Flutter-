@@ -3,13 +3,11 @@ import 'package:flutter_form_validation/src/blocs/provider.dart';
 import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/register_page.dart';
 import 'package:flutter_form_validation/src/providers/user_provider.dart';
-import 'package:flutter_form_validation/src/providers/user_shared_preferences.dart';
 import 'package:flutter_form_validation/src/utils/utils.dart';
 
 class LoginPage extends StatelessWidget {
   static final String routeName = 'login_page';
   final _userProvider = UserProvider();
-  final _preference = UserSharedPreferences();
 
   @override
   Widget build(BuildContext context) {

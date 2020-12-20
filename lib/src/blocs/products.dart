@@ -29,10 +29,11 @@ class ProductsBloc {
     _loadController.sink.add(false);
   }
 
-  void deleteProduct (String idToDelete) async {
+  Future<int> deleteProduct (String idToDelete) async {
     _loadController.sink.add(true);
-    await _productsProvider.deleteProduct(idToDelete);
+    final result = await _productsProvider.deleteProduct(idToDelete);
     _loadController.sink.add(false);
+    return result;
   }
 
   Future<String> uploadImage (PickedFile imageFile) async {

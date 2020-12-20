@@ -28,6 +28,7 @@ class ProductsProvider {
     final List<ProductModel> products = List();
 
     if (decodedData == null || decodedData.length < 2) {
+      _preference.setToken = null;
       return [];
     } else {
       decodedData.forEach((id, product) {
