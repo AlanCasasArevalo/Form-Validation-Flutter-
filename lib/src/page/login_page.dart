@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_validation/src/blocs/provider.dart';
+import 'package:flutter_form_validation/src/page/home_page.dart';
 import 'package:flutter_form_validation/src/page/register_page.dart';
 import 'package:flutter_form_validation/src/providers/user_provider.dart';
+import 'package:flutter_form_validation/src/providers/user_shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
   static final String routeName = 'login_page';
   final _userProvider = UserProvider();
+  final _preference = UserSharedPreferences();
 
   @override
   Widget build(BuildContext context) {
@@ -146,8 +149,12 @@ class LoginPage extends StatelessWidget {
 
   }
 
-  _login(BuildContext context, LoginBloc bloc) {
-    _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.login);
+  _login(BuildContext context, LoginBloc bloc) async {
+    if (_preference.token != null && _preference.token != '') {
+      Navigator.pushReplacementNamed(context, HomePage.routeName);
+    } else {
+      final result = await _userProvider.registerOrLoginUser(bloc.email, bloc.password, CallUserType.login);
+    }
 
     // Navigator.pushReplacementNamed(context, HomePage.routeName);
   }

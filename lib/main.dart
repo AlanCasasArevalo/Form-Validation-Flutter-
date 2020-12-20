@@ -5,8 +5,12 @@ import 'package:flutter_form_validation/src/page/login_page.dart';
 import 'package:flutter_form_validation/src/page/register_page.dart';
 
 import 'src/page/product_page.dart';
+import 'src/providers/user_shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final _preference = UserSharedPreferences();
+  await _preference.initPreferences();
   runApp(MyApp());
 }
 

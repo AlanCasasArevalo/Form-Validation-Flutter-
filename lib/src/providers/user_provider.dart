@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_form_validation/src/providers/user_shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 enum CallUserType {
@@ -7,7 +8,9 @@ enum CallUserType {
 }
 
 class UserProvider {
-  final String _firebaseToken = 'YOUR_FIREBASE_API_JEY';
+  final String _firebaseToken = 'YOUR_FIREBASE_API_KEY';
+
+  final _preference = UserSharedPreferences();
 
   Future<Map<String, dynamic>> registerOrLoginUser(String email, String password, CallUserType type) async {
     var url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$_firebaseToken';
@@ -31,6 +34,7 @@ class UserProvider {
         response.reasonPhrase == 'OK') {
       if (decodedResponse.containsKey('idToken')) {
         // TODO: Salvar token
+        _preference.setToken = decodedResponse['idToken'];
         return {'ok': true, 'token': decodedResponse['idToken']};
       } else {
         return {'ok': false, 'token': decodedResponse['error']['message']};
