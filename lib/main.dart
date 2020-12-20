@@ -15,13 +15,15 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final _preference = UserSharedPreferences();
+
   @override
   Widget build(BuildContext context) {
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Form Validation',
-        initialRoute: LoginPage.routeName,
+        initialRoute: (_preference.token != null || _preference.token != '') ? HomePage.routeName : LoginPage.routeName,
         routes: {
           HomePage.routeName: (BuildContext context) => HomePage(),
           LoginPage.routeName: (BuildContext context) => LoginPage(),
